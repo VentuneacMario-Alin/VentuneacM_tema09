@@ -1,0 +1,34 @@
+1. Utilizați pentru texturare imagini cu transparență și fără. Ce observați?
+
+Dacă se aplică o textură fără canal alfa, aceasta acoperă integral suprafața obiectului și nu permite vizualizarea elementelor din spatele ei. Obiectul obține un aspect complet opac, iar contururile geometriei devin strict cele definite de mesh.
+
+În schimb, o textură care conține transparență lasă să se vadă parțial sau total zone din scena aflată în spatele ei. Pentru ca transparența să funcționeze, OpenGL trebuie să aibă blending-ul activat și configurat corect. Folosirea texturilor cu alfa poate genera efecte de decupare, translucență sau suprafețe sticloase. Ordinea de randare este esențială: obiectele transparente trebuie desenate după cele opace pentru a evita probleme precum suprapuneri incorecte.
+
+2. Ce formate de imagine pot fi folosite în procesul de texturare în OpenGL?
+
+OpenGL poate lucra cu o gamă variată de formate grafice, deși nu le interpretează direct — este nevoie de biblioteci de încărcare specializate (STB Image, FreeImage, DevIL etc.). Printre formatele des utilizate se numără:
+
+BMP – simplu și necomprimat, ușor de procesat, dar fără suport pentru transparență.
+
+PNG – foarte popular, oferă compresie fără pierderi și include canal alpha.
+
+JPG/JPEG – comprimă cu pierderi, ideal pentru fotografii, dar nu suportă transparență.
+
+TGA – folosit în aplicații grafice, suportă alfa și poate fi procesat rapid.
+
+DDS – gândit special pentru texturi, include compresie hardware-friendly și mipmaps.
+
+Bibliotecile menționate convertesc aceste formate în date brute (pixeli) pentru a putea fi trimise GPU-ului sub formă de textură.
+
+3. Ce se întâmplă când se modifică culoarea (canalele RGB) unui obiect texturat?
+
+Efectul schimbării culorii depinde de modul de combinare a texturii cu culoarea materialului. În modul modulate, valorile RGB ale obiectului se multiplică cu cele din textură. Acest lucru poate intensifica sau estompa culorile texturii. Un material alb păstrează aspectul texturii, unul gri o întunecă, iar culori foarte saturate pot modifica drastic nuanțele texturii.
+
+În modurile decal sau replace, OpenGL ignoră culoarea setată pentru obiect și folosește exclusiv pixelii texturii. Modul de lucru ales influențează felul în care pot fi create variații cromatice, efecte de iluminare sau combinații între material și textură.
+
+4. Ce diferențe apar între o scenă cu obiecte texturate când iluminarea este activată sau dezactivată?
+
+Atunci când iluminarea este oprită, textura este afișată exact așa cum a fost încărcată, fără ajustări de luminozitate sau umbriere. Obiectele par „plate”, fără informație despre sursele de lumină din scenă.
+
+Cu iluminarea pornită, textura interacționează cu componentele modelului de iluminare (ambientă, difuză, speculară). Suprafața capătă umbre, zone evidențiate de lumină și o profunzime mai credibilă. Normalele obiectului influențează modul în care lumina cade pe textură, iar materialele pot adăuga reflexii sau luciu. Rezultatul este un obiect mult mai realist, integrat corespunzător într-o scenă tridimensională.
+
